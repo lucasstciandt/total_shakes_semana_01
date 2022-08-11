@@ -1,9 +1,13 @@
 package pedido;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Objects;
 
 
-public class Pedido {
+public class Pedido implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private final int id;
     private final ArrayList<ItemPedido> itens;
@@ -91,6 +95,19 @@ public class Pedido {
 
     public Cliente getCliente(){
         return this.cliente;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Pedido pedido = (Pedido) o;
+        return id == pedido.id && itens.equals(pedido.itens) && cliente.equals(pedido.cliente);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, itens, cliente);
     }
 
     @Override

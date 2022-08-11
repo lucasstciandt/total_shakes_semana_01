@@ -1,17 +1,14 @@
 package ingredientes.base;
-
 import ingredientes.Ingrediente;
 
 public class Base implements Ingrediente,Comparable<Ingrediente>{
+
+    private static final long serialVersionUID = 2L;
 
     private final TipoBase tipoBase;
 
     public Base(TipoBase tipoBase) {
         this.tipoBase = tipoBase;
-    }
-
-    public TipoBase getTipoBase(){
-        return this.tipoBase;
     }
 
     @Override

@@ -2,7 +2,9 @@ package pedido;
 
 import java.io.*;
 
-public class Cliente implements Serializable {
+public class Cliente implements Serializable, FazPedido {
+
+    private static final long serialVersionUID = 1L;
 
     private final int id;
     private final String nome;
@@ -15,48 +17,54 @@ public class Cliente implements Serializable {
     }
 
     public void serializarCliente(){
-        FileOutputStream fos = null;
-        ObjectOutputStream oos = null;
+        try(var outputStream = new ObjectOutputStream(new FileOutputStream("Cliente-" + this.id + ".txt"))){
 
-        try{
-            fos = new FileOutputStream("Cliente-" + this.id + ".txt");
-            oos = new ObjectOutputStream(fos);
-            oos.writeObject(this);
-        }catch(Exception e){
-            System.out.println("Nao foi possivel serializar");
-        }finally{
-            if(oos != null){
-                try{
-                    oos.close();
-                }catch(IOException e){
-                    System.out.println("Nao foi possivel fechar o arquivo");
-                }
-            }
+            outputStream.writeObject(this);
+
+        }catch (Exception e){
+
+            System.out.println("Nao foi possivel desserializar");
+            e.printStackTrace();
         }
     }
 
     public static Cliente desserializarCliente(int id){
-        FileInputStream fis = null;
-        ObjectInputStream ois = null;
+        try(var objectInputStream = new ObjectInputStream(new FileInputStream("Cliente-" + id + ".txt"))){
 
-        try{
-            fis = new FileInputStream("Cliente-" + id + ".txt");
-            ois = new ObjectInputStream(fis);
+            return (Cliente) objectInputStream.readObject();
 
-            @SuppressWarnings("unchecked") Cliente cliente = (Cliente) ois.readObject();
+        }catch (Exception e){
 
-            return cliente;
-        }catch(Exception e){
             System.out.println("Nao foi possivel desserializar");
+            e.printStackTrace();
             return null;
-        }finally{
-            if(ois != null){
-                try{
-                    ois.close();
-                }catch(IOException e){
-                    System.out.println("Nao foi possivel fechar o arquivo");
-                }
-            }
+        }
+    }
+
+    @Override
+    public void serializarPedido(Pedido pedido) {
+        try(var outputStream = new ObjectOutputStream(new FileOutputStream("Pedido-" + pedido.getId() + ".txt"))){
+
+            outputStream.writeObject(pedido);
+
+        }catch (Exception e){
+
+            System.out.println("Nao foi possivel desserializar");
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public  Pedido desserializarPedido(int id){
+        try(var objectInputStream = new ObjectInputStream(new FileInputStream("Pedido-" + id + ".txt"))){
+
+            return (Pedido) objectInputStream.readObject();
+
+        }catch (Exception e){
+
+            System.out.println("Nao foi possivel desserializar");
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -84,4 +92,6 @@ public class Cliente implements Serializable {
     public String toString() {
         return this.id + " - " + this.nome + " - " + this.email;
     }
+
+
 }
