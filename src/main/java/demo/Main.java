@@ -10,7 +10,6 @@ import ingredientes.topping.TipoTopping;
 import ingredientes.topping.Topping;
 import pedido.Cardapio;
 import pedido.Cliente;
-import pedido.ItemPedido;
 import produto.Shake;
 import produto.TipoTamanho;
 

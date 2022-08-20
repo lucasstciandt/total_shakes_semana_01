@@ -1,0 +1,15 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+ShakeCIT,produto,Shake,50,130,4,12,5,28,6,15,2,11
+ShakeCIT,produto,TipoTamanho,0,35,0,0,0,8,0,3,0,3
+ShakeCIT,pedido,Cardapio,30,131,0,4,5,22,4,14,4,12
+ShakeCIT,pedido,Pedido,70,196,12,4,8,43,11,14,5,12
+ShakeCIT,pedido,ItemPedido,17,40,2,4,2,12,4,6,2,5
+ShakeCIT,pedido,Cliente,107,12,8,0,24,5,9,1,5,1
+ShakeCIT,ingredientes.base,Base,12,35,2,4,2,9,4,5,2,4
+ShakeCIT,ingredientes.base,TipoBase,0,21,0,0,0,4,0,1,0,1
+ShakeCIT,ingredientes.fruta,TipoFruta,0,21,0,0,0,4,0,1,0,1
+ShakeCIT,ingredientes.fruta,Fruta,13,34,3,3,2,9,5,4,2,4
+ShakeCIT,demo,Program,303,0,0,0,62,0,2,0,2,0
+ShakeCIT,demo,Main,586,0,53,0,191,0,50,0,15,0
+ShakeCIT,ingredientes.topping,Topping,10,37,1,5,2,9,3,6,2,4
+ShakeCIT,ingredientes.topping,TipoTopping,0,21,0,0,0,4,0,1,0,1

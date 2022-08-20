@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Cliente.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ShakeCIT</a> &gt; <a href="index.source.html" class="el_package">pedido</a> &gt; <span class="el_source">Cliente.java</span></div><h1>Cliente.java</h1><pre class="source lang-java linenums">package pedido;
+
+import java.io.*;
+
+public class Cliente implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    private final int id;
+    private final String nome;
+    private final String email;
+
+<span class="fc" id="L13">    public Cliente(int id, String nome, String email) {</span>
+<span class="fc" id="L14">        this.id = id;</span>
+<span class="fc" id="L15">        this.nome = nome;</span>
+<span class="fc" id="L16">        this.email = email;</span>
+<span class="fc" id="L17">    }</span>
+
+    public void serializarCliente(){
+<span class="nc" id="L20">        try(var outputStream = new ObjectOutputStream(new FileOutputStream(&quot;Cliente-&quot; + this.id + &quot;.txt&quot;))){</span>
+
+<span class="nc" id="L22">            outputStream.writeObject(this);</span>
+
+<span class="nc" id="L24">        }catch (Exception e){</span>
+
+<span class="nc" id="L26">            System.out.println(&quot;Nao foi possivel desserializar&quot;);</span>
+<span class="nc" id="L27">            e.printStackTrace();</span>
+<span class="nc" id="L28">        }</span>
+<span class="nc" id="L29">    }</span>
+
+    public static Cliente desserializarCliente(int id){
+<span class="nc" id="L32">        try(var objectInputStream = new ObjectInputStream(new FileInputStream(&quot;Cliente-&quot; + id + &quot;.txt&quot;))){</span>
+
+<span class="nc" id="L34">            return (Cliente) objectInputStream.readObject();</span>
+
+<span class="nc" id="L36">        }catch (Exception e){</span>
+
+<span class="nc" id="L38">            System.out.println(&quot;Nao foi possivel desserializar&quot;);</span>
+<span class="nc" id="L39">            e.printStackTrace();</span>
+<span class="nc" id="L40">            return null;</span>
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+<span class="nc bnc" id="L46" title="All 2 branches missed.">        if (this == o) return true;</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">        if (!(o instanceof Cliente)) return false;</span>
+
+<span class="nc" id="L49">        Cliente cliente = (Cliente) o;</span>
+
+<span class="nc bnc" id="L51" title="All 2 branches missed.">        if (id != cliente.id) return false;</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        if (!nome.equals(cliente.nome)) return false;</span>
+<span class="nc" id="L53">        return email.equals(cliente.email);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L58">        int result = id;</span>
+<span class="nc" id="L59">        result = 31 * result + nome.hashCode();</span>
+<span class="nc" id="L60">        result = 31 * result + email.hashCode();</span>
+<span class="nc" id="L61">        return result;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L66">        return this.id + &quot; - &quot; + this.nome + &quot; - &quot; + this.email;</span>
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

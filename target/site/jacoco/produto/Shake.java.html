@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Shake.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ShakeCIT</a> &gt; <a href="index.source.html" class="el_package">produto</a> &gt; <span class="el_source">Shake.java</span></div><h1>Shake.java</h1><pre class="source lang-java linenums">package produto;
+
+import ingredientes.*;
+import ingredientes.base.Base;
+import ingredientes.fruta.Fruta;
+import ingredientes.topping.Topping;
+
+import java.io.Serializable;
+import java.util.*;
+
+public class Shake implements Serializable {
+
+    private final Base base;
+    private final Fruta fruta;
+    private final Topping topping;
+<span class="fc" id="L16">    private List&lt;Adicional&gt; adicionais = new ArrayList&lt;&gt;();</span>
+    private final TipoTamanho  tipoTamanho;
+
+<span class="fc" id="L19">    public Shake(Base base, Fruta fruta, Topping topping, List&lt;Adicional&gt; adicionais, TipoTamanho tipoTamanho) {</span>
+<span class="fc" id="L20">        this.base = base;</span>
+<span class="fc" id="L21">        this.fruta = fruta;</span>
+<span class="fc" id="L22">        this.topping = topping;</span>
+<span class="fc" id="L23">        this.adicionais = ordenarAntesDeAtribuir(adicionais);</span>
+<span class="fc" id="L24">        this.tipoTamanho = tipoTamanho;</span>
+<span class="fc" id="L25">    }</span>
+
+<span class="fc" id="L27">    public Shake(Base base, Fruta fruta, Topping topping, TipoTamanho tipoTamanho) {</span>
+<span class="fc" id="L28">        this.base = base;</span>
+<span class="fc" id="L29">        this.fruta = fruta;</span>
+<span class="fc" id="L30">        this.topping = topping;</span>
+<span class="fc" id="L31">        this.tipoTamanho = tipoTamanho;</span>
+<span class="fc" id="L32">    }</span>
+
+    public Base getBase() {
+<span class="fc" id="L35">        return base;</span>
+    }
+
+    public Fruta getFruta() {
+<span class="fc" id="L39">        return fruta;</span>
+    }
+
+    public Topping getTopping() {
+<span class="fc" id="L43">        return topping;</span>
+    }
+
+    public List&lt;Adicional&gt; getAdicionais() {
+<span class="fc" id="L47">        adicionais.sort(((adicional, adicional2) -&gt; adicional.obterTipo().toString()</span>
+<span class="fc" id="L48">                .compareToIgnoreCase(adicional2.obterTipo().toString())));</span>
+<span class="fc" id="L49">        return adicionais;</span>
+    }
+
+    public TipoTamanho getTipoTamanho() {
+<span class="fc" id="L53">        return tipoTamanho;</span>
+    }
+
+    private List&lt;Adicional&gt; ordenarAntesDeAtribuir(List&lt;Adicional&gt; adicionais) {
+<span class="fc" id="L57">        adicionais.sort(Comparator.comparing(adicional -&gt; adicional.obterTipo().toString()));</span>
+<span class="fc" id="L58">        return adicionais;</span>
+    }
+
+    @Override
+    public boolean equals(Object o) {
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        if (this == o) return true;</span>
+<span class="pc bpc" id="L64" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass()) return false;</span>
+<span class="fc" id="L65">        Shake shake = (Shake) o;</span>
+<span class="pc bpc" id="L66" title="1 of 6 branches missed.">        return base.equals(shake.base) &amp;&amp; fruta.equals(shake.fruta) &amp;&amp; topping.equals(shake.topping)</span>
+<span class="pc bpc" id="L67" title="1 of 4 branches missed.">                &amp;&amp; Objects.equals(adicionais, shake.adicionais) &amp;&amp; tipoTamanho == shake.tipoTamanho;</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L72">        return Objects.hash(base, fruta, topping, adicionais, tipoTamanho);</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L77">        return this.base.obterTipo().toString() + &quot; / &quot;</span>
+<span class="nc" id="L78">                + this.fruta.obterTipo().toString()</span>
+<span class="nc" id="L79">                + &quot; / &quot; + this.topping.obterTipo().toString()</span>
+<span class="nc" id="L80">                + &quot; / &quot; + this.adicionais + &quot; / &quot; + this.tipoTamanho.toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
