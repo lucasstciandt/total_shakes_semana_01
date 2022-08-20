@@ -1,1 +1,1 @@
-[![Java CI with Maven](https://github.com/lucasstciandt/total_shakes_semana_01/actions/workflows/build.yml/badge.svg?branch=totalshake%2Fweek2)](https://github.com/lucasstciandt/total_shakes_semana_01/actions/workflows/build.yml)
+[![Tests and Building](https://github.com/lucasstciandt/total_shakes_semana_01/actions/workflows/build.yml/badge.svg?branch=totalshake%2Fweek2)](https://github.com/lucasstciandt/total_shakes_semana_01/actions/workflows/build.yml)
