@@ -1,2 +1,4 @@
 pedido/CardapioTest.class
+builders/CardapioBuilder.class
+builders/ShakeBuilder.class
 pedido/PedidoTest.class
