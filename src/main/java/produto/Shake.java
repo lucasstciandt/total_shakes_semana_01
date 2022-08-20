@@ -10,11 +10,11 @@ import java.util.*;
 
 public class Shake implements Serializable {
 
-    private final Base base;
-    private final Fruta fruta;
-    private final Topping topping;
+    private Base base;
+    private Fruta fruta;
+    private Topping topping;
     private List<Adicional> adicionais = new ArrayList<>();
-    private final TipoTamanho  tipoTamanho;
+    private TipoTamanho  tipoTamanho;
 
     public Shake(Base base, Fruta fruta, Topping topping, List<Adicional> adicionais, TipoTamanho tipoTamanho) {
         this.base = base;
@@ -29,6 +29,10 @@ public class Shake implements Serializable {
         this.fruta = fruta;
         this.topping = topping;
         this.tipoTamanho = tipoTamanho;
+    }
+
+    public Shake() {
+
     }
 
     public Base getBase() {
@@ -56,6 +60,26 @@ public class Shake implements Serializable {
     private List<Adicional> ordenarAntesDeAtribuir(List<Adicional> adicionais) {
         adicionais.sort(Comparator.comparing(adicional -> adicional.obterTipo().toString()));
         return adicionais;
+    }
+
+    public void setBase(Base base) {
+        this.base = base;
+    }
+
+    public void setFruta(Fruta fruta) {
+        this.fruta = fruta;
+    }
+
+    public void setTopping(Topping topping) {
+        this.topping = topping;
+    }
+
+    public void setAdicionais(List<Adicional> adicionais) {
+        this.adicionais = ordenarAntesDeAtribuir(adicionais);
+    }
+
+    public void setTipoTamanho(TipoTamanho tipoTamanho) {
+        this.tipoTamanho = tipoTamanho;
     }
 
     @Override
