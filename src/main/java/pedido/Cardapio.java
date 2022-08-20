@@ -3,7 +3,12 @@ package pedido;
 import ingredientes.Adicional;
 import ingredientes.Ingrediente;
 
+import java.util.Collection;
+import java.util.Map;
 import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class Cardapio {
 
@@ -70,5 +75,4 @@ public class Cardapio {
     public TreeMap<Ingrediente, Double> getPrecos(){
         return this.precos;
     }
-
 }
