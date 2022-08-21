@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Armazem.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ShakeCIT</a> &gt; <a href="index.source.html" class="el_package">armazem</a> &gt; <span class="el_source">Armazem.java</span></div><h1>Armazem.java</h1><pre class="source lang-java linenums">package armazem;
+
+import ingredientes.Ingrediente;
+
+import java.util.Map;
+import java.util.TreeMap;
+
+<span class="fc" id="L8">public class Armazem {</span>
+
+<span class="fc" id="L10">    Map&lt;Ingrediente, Integer&gt; estoque = new TreeMap&lt;&gt;();</span>
+
+    public void cadastrarIngrediente(Ingrediente ingrediente) {
+<span class="fc bfc" id="L13" title="All 2 branches covered.">        if (estoque.containsKey(ingrediente)) throw new IllegalArgumentException(&quot;Ingrediente já cadastrado&quot;);</span>
+<span class="fc" id="L14">        estoque.put(ingrediente, 0);</span>
+<span class="fc" id="L15">    }</span>
+
+    public void descadastrarIngrediente(Ingrediente ingrediente) {
+<span class="fc" id="L18">        this.validarExistenciaDoIngrediente(ingrediente);</span>
+<span class="fc" id="L19">        estoque.remove(ingrediente);</span>
+<span class="fc" id="L20">    }</span>
+
+    public void adicionarQuantidadeDoIngredienteEmEstoque(Ingrediente ingrediente, int quantidade) {
+
+<span class="fc" id="L24">        this.validarQuantidade(quantidade);</span>
+
+<span class="fc" id="L26">        estoque.entrySet().stream()</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">                .filter(ingredientes -&gt; ingredientes.getKey().obterTipo() == ingrediente.obterTipo())</span>
+<span class="fc" id="L28">                .findFirst()</span>
+<span class="fc" id="L29">                .ifPresentOrElse(</span>
+<span class="fc" id="L30">                        ingredienteEncontrado -&gt; aumentarQuantidade(ingrediente, quantidade, ingredienteEncontrado.getValue()),</span>
+<span class="fc" id="L31">                        () -&gt; { throw new IllegalArgumentException(&quot;Ingrediente não encontrado&quot;); }</span>
+                );
+<span class="fc" id="L33">    }</span>
+
+    public void reduzirQuantidadeDoIngredienteEmEstoque(Ingrediente ingrediente, int quantidade) {
+
+<span class="fc" id="L37">        this.validarQuantidade(quantidade);</span>
+        
+<span class="fc" id="L39">        estoque.entrySet().stream()</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">                .filter(ingredientes -&gt; ingredientes.getKey().obterTipo() == ingrediente.obterTipo())</span>
+<span class="fc" id="L41">                .findFirst()</span>
+<span class="fc" id="L42">                .ifPresentOrElse(</span>
+<span class="fc" id="L43">                        ingredienteEncontrado -&gt; reduzirQuantidade(ingrediente, quantidade, ingredienteEncontrado.getValue()),</span>
+<span class="fc" id="L44">                        () -&gt; { throw new IllegalArgumentException(&quot;Ingrediente não encontrado&quot;); }</span>
+                );
+<span class="fc" id="L46">    }</span>
+
+    public int consultarQuantidadeDoIngredienteEmEstoque(Ingrediente ingrediente) {
+<span class="fc" id="L49">        this.validarExistenciaDoIngrediente(ingrediente);</span>
+<span class="fc" id="L50">        return estoque.get(ingrediente);</span>
+    }
+
+    private void aumentarQuantidade(Ingrediente ingrediente, int quantidade, int quantidadeAtual) {
+<span class="fc" id="L54">        int novaQuantidade = quantidadeAtual + quantidade;</span>
+<span class="fc" id="L55">        estoque.put(ingrediente, novaQuantidade);</span>
+<span class="fc" id="L56">    }</span>
+
+    private void reduzirQuantidade(Ingrediente ingrediente, int quantidade, int quantidadeAtual ) {
+<span class="fc" id="L59">        int novaQuantidade = quantidadeAtual - quantidade;</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        if(novaQuantidade &lt;= 0){</span>
+<span class="fc" id="L61">            estoque.remove(ingrediente);</span>
+        }else{
+<span class="fc" id="L63">            estoque.put(ingrediente, novaQuantidade);</span>
+        }
+<span class="fc" id="L65">    }</span>
+
+    private void validarQuantidade(int quantidade) {
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        if(quantidade &lt;= 0) throw new IllegalArgumentException(&quot;Quantidade invalida&quot;);</span>
+<span class="fc" id="L69">    }</span>
+
+    private void validarExistenciaDoIngrediente(Ingrediente ingrediente){
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        if(!estoque.containsKey(ingrediente)) throw new IllegalArgumentException(&quot;Ingrediente não encontrado&quot;);</span>
+<span class="fc" id="L73">    }</span>
+
+    public Map&lt;Ingrediente, Integer&gt; getEstoque() {
+<span class="fc" id="L76">        return estoque;</span>
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

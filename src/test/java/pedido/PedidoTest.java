@@ -150,8 +150,9 @@ public class PedidoTest{
 
         var itemPedidoInexistente = new ItemPedido(shake, 10);
 
-        assertThrows(IllegalArgumentException.class, () -> pedido.removeItemPedido(itemPedidoInexistente),
-                "Item nao existe no pedido.");
+        var exception = assertThrows(IllegalArgumentException.class,
+                () -> pedido.removeItemPedido(itemPedidoInexistente));
+        assertEquals("Item nao existe no pedido.", exception.getMessage());
     }
 
     @Test

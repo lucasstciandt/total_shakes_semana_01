@@ -1,6 +1,7 @@
 ingredientes/fruta/Fruta.class
 ingredientes/Ingrediente.class
 produto/Shake.class
+armazem/Armazem.class
 ingredientes/base/Base.class
 ingredientes/topping/Topping.class
 pedido/Cliente.class

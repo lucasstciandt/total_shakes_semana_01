@@ -15,7 +15,7 @@ public class Armazem {
     }
 
     public void descadastrarIngrediente(Ingrediente ingrediente) {
-        if (!estoque.containsKey(ingrediente)) throw new IllegalArgumentException("Ingrediente não encontrado");
+        this.validarExistenciaDoIngrediente(ingrediente);
         estoque.remove(ingrediente);
     }
 
@@ -46,7 +46,7 @@ public class Armazem {
     }
 
     public int consultarQuantidadeDoIngredienteEmEstoque(Ingrediente ingrediente) {
-        if(!estoque.containsKey(ingrediente)) throw new IllegalArgumentException("Ingrediente não encontrado");
+        this.validarExistenciaDoIngrediente(ingrediente);
         return estoque.get(ingrediente);
     }
 
@@ -66,6 +66,10 @@ public class Armazem {
 
     private void validarQuantidade(int quantidade) {
         if(quantidade <= 0) throw new IllegalArgumentException("Quantidade invalida");
+    }
+
+    private void validarExistenciaDoIngrediente(Ingrediente ingrediente){
+        if(!estoque.containsKey(ingrediente)) throw new IllegalArgumentException("Ingrediente não encontrado");
     }
 
     public Map<Ingrediente, Integer> getEstoque() {

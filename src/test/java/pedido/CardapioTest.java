@@ -69,18 +69,10 @@ public class CardapioTest {
     @Test
     void deve_lancarExcecaoAoAdicionar_ingredientes_quandoPrecoNegativoOuZero(){
         var cardapioVazio = umCardapio().build();
-        assertAll(
-                () -> assertThrows(
-                        IllegalArgumentException.class,
-                        () -> cardapioVazio.adicionarIngrediente(new Base(TipoBase.IOGURTE), -9.0),
-                        "Preco invalido."
-                ),
-                () -> assertThrows(
-                        IllegalArgumentException.class,
-                        () -> cardapioVazio.adicionarIngrediente(new Fruta(TipoFruta.MORANGO), 0.0),
-                        "Preco invalido."
-                )
-        );
+
+        var exception = assertThrows( IllegalArgumentException.class,
+                        () -> cardapioVazio.adicionarIngrediente(new Base(TipoBase.IOGURTE), -9.0));
+        assertEquals("Preco invalido.", exception.getMessage());
     }
 
     @Test
@@ -103,40 +95,28 @@ public class CardapioTest {
 
         var cardapioComBases = umCardapio().comTodasAsBases().build();
 
-        assertAll(
-                () -> assertThrows(
-                        IllegalArgumentException.class,
-                        () -> cardapioComBases.atualizarIngrediente(new Base(TipoBase.IOGURTE), -9.0),
-                        "Preco invalido."
-                ),
-                () -> assertThrows(
-                        IllegalArgumentException.class,
-                        () -> cardapioComBases.atualizarIngrediente(new Base(TipoBase.SORVETE), 0.0),
-                        "Preco invalido."
-                )
-        );
+        var exception = assertThrows(IllegalArgumentException.class,
+                        () -> cardapioComBases.atualizarIngrediente(new Base(TipoBase.IOGURTE), -9.0));
+        assertEquals("Preco invalido.", exception.getMessage());
     }
 
     @Test
     void deve_lancarExcecaoAoTentarAtualizar_ingredientes_inexistentes(){
         var cardapioVazio = umCardapio().build();
 
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> cardapioVazio.atualizarIngrediente(new Topping(TipoTopping.MEL), 19.0),
-                "Ingrediente nao existe no cardapio."
-        );
+        var exception = assertThrows(IllegalArgumentException.class,
+                () -> cardapioVazio.atualizarIngrediente(new Topping(TipoTopping.MEL), 19.0));
+        assertEquals("Ingrediente nao existe no cardapio.", exception.getMessage());
     }
 
     @Test
     void deve_lancarExcecaoAoTentarRemover_ingredientes_inexistentes(){
         var cardapioVazio = umCardapio().build();
 
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> cardapioVazio.removerIngrediente(new Topping(TipoTopping.MEL)),
-                "Ingrediente nao existe no cardapio."
-        );
+        var exception = assertThrows(IllegalArgumentException.class,
+                () -> cardapioVazio.removerIngrediente(new Topping(TipoTopping.MEL)));
+        assertEquals("Ingrediente nao existe no cardapio.", exception.getMessage());
+
     }
 
     @Test
@@ -153,11 +133,10 @@ public class CardapioTest {
     @Test
     void deve_lancarExcecaoAoTentarBuscarPrecoDe_ingredientes_inexistentes(){
         var cardapioComBases = umCardapio().comTodasAsBases().build();
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> cardapioComBases.buscarPreco(new Fruta(TipoFruta.MORANGO)),
-                "Ingrediente nao existe no cardapio."
-        );
+
+        var exception = assertThrows(IllegalArgumentException.class,
+                () -> cardapioComBases.buscarPreco(new Fruta(TipoFruta.MORANGO)));
+        assertEquals("Ingrediente nao existe no cardapio.", exception.getMessage());
     }
 
 }

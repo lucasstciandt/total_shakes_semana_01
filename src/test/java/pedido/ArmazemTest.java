@@ -35,8 +35,8 @@ public class ArmazemTest {
         Armazem armazem = new Armazem();
         armazem.cadastrarIngrediente(morango);
 
-        assertThrows(IllegalArgumentException.class, () -> armazem.cadastrarIngrediente(morango),
-                "Ingrediente já cadastrado");
+        var exception = assertThrows(IllegalArgumentException.class, () -> armazem.cadastrarIngrediente(morango));
+        assertEquals("Ingrediente já cadastrado", exception.getMessage());
     }
 
 
@@ -62,9 +62,9 @@ public class ArmazemTest {
         Ingrediente morango = new Fruta(TipoFruta.MORANGO);
         Armazem armazem = new Armazem();
 
-        assertThrows(IllegalArgumentException.class, () -> armazem.descadastrarIngrediente(morango),
-                "Ingrediente não encontrado");
-
+        var exception =assertThrows(IllegalArgumentException.class,
+                () -> armazem.descadastrarIngrediente(morango));
+        assertEquals("Ingrediente não encontrado", exception.getMessage());
     }
 
     @Test
@@ -91,18 +91,9 @@ public class ArmazemTest {
         armazem.cadastrarIngrediente(morango);
         armazem.cadastrarIngrediente(leite);
 
-        assertAll(
-                () -> assertThrows(
-                        IllegalArgumentException.class,
-                        () -> armazem.adicionarQuantidadeDoIngredienteEmEstoque(morango, 0),
-                        "Quantidade invalida"
-                ),
-                () -> assertThrows(
-                        IllegalArgumentException.class,
-                        () -> armazem.adicionarQuantidadeDoIngredienteEmEstoque(leite, -4),
-                        "Quantidade invalida"
-                )
-        );
+        var exception = assertThrows( IllegalArgumentException.class,
+                () -> armazem.adicionarQuantidadeDoIngredienteEmEstoque(morango, 0));
+        assertEquals("Quantidade invalida", exception.getMessage());
     }
 
     @Test
@@ -115,14 +106,10 @@ public class ArmazemTest {
         assertAll(
                 () -> assertThrows(
                         IllegalArgumentException.class,
-                        () -> armazem.adicionarQuantidadeDoIngredienteEmEstoque(morango, 2),
-                        "Ingrediente não encontrado"
-                ),
+                        () -> armazem.adicionarQuantidadeDoIngredienteEmEstoque(morango, 2)),
                 () -> assertThrows(
                         IllegalArgumentException.class,
-                        () -> armazem.adicionarQuantidadeDoIngredienteEmEstoque(leite, 3),
-                        "Ingrediente não encontrado"
-                )
+                        () -> armazem.adicionarQuantidadeDoIngredienteEmEstoque(leite, 3))
         );
     }
 
@@ -161,14 +148,10 @@ public class ArmazemTest {
         assertAll(
                 () -> assertThrows(
                         IllegalArgumentException.class,
-                        () -> armazem.reduzirQuantidadeDoIngredienteEmEstoque(morango, 0),
-                        "Quantidade invalida"
-                ),
+                        () -> armazem.reduzirQuantidadeDoIngredienteEmEstoque(morango, 0)),
                 () -> assertThrows(
                         IllegalArgumentException.class,
-                        () -> armazem.reduzirQuantidadeDoIngredienteEmEstoque(leite, -4),
-                        "Quantidade invalida"
-                )
+                        () -> armazem.reduzirQuantidadeDoIngredienteEmEstoque(leite, -4))
         );
     }
 
@@ -182,14 +165,10 @@ public class ArmazemTest {
         assertAll(
                 () -> assertThrows(
                         IllegalArgumentException.class,
-                        () -> armazem.reduzirQuantidadeDoIngredienteEmEstoque(morango, 2),
-                        "Ingrediente não encontrado"
-                ),
+                        () -> armazem.reduzirQuantidadeDoIngredienteEmEstoque(morango, 2)),
                 () -> assertThrows(
                         IllegalArgumentException.class,
-                        () -> armazem.reduzirQuantidadeDoIngredienteEmEstoque(leite, 3),
-                        "Ingrediente não encontrado"
-                )
+                        () -> armazem.reduzirQuantidadeDoIngredienteEmEstoque(leite, 3))
         );
     }
 
@@ -222,9 +201,7 @@ public class ArmazemTest {
                 () -> assertFalse(armazem.getEstoque().containsKey(morango)),
                 () -> assertThrows(
                         IllegalArgumentException.class,
-                        () ->armazem.consultarQuantidadeDoIngredienteEmEstoque(morango),
-                        "Ingrediente nao encontrado"
-                )
+                        () ->armazem.consultarQuantidadeDoIngredienteEmEstoque(morango))
         );
     }
 }
