@@ -19,9 +19,23 @@ public class Armazem {
         estoque.remove(ingrediente);
     }
 
+    public void adicionarQuantidadeDoIngrediente(Ingrediente ingrediente, int quantidade) {
+
+        if(quantidade <= 0) throw new IllegalArgumentException("Quantidade invalida");
+
+        estoque.entrySet().stream()
+                .filter(ingredientes -> ingredientes.getKey().obterTipo().equals(ingrediente.obterTipo()))
+                .findFirst()
+                .ifPresentOrElse(ingredienteEncontrado -> {
+                    int novaQuantidade = ingredienteEncontrado.getValue() + quantidade;
+                    estoque.put(ingrediente, novaQuantidade);
+
+                }, () -> {
+                    throw new IllegalArgumentException("Ingrediente não encontrado");
+                });
+    }
+
     public Map<Ingrediente, Integer> getEstoque() {
         return estoque;
     }
-
-
 }

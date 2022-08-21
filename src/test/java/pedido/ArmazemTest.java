@@ -2,6 +2,8 @@ package pedido;
 
 import armazem.Armazem;
 import ingredientes.Ingrediente;
+import ingredientes.base.Base;
+import ingredientes.base.TipoBase;
 import ingredientes.fruta.Fruta;
 import ingredientes.fruta.TipoFruta;
 import org.junit.jupiter.api.Test;
@@ -62,5 +64,64 @@ public class ArmazemTest {
         assertThrows(IllegalArgumentException.class, () -> armazem.descadastrarIngrediente(morango),
                 "Ingrediente não encontrado");
 
+    }
+
+    @Test
+    public void deve_aumentarAQuantidadeDo_ingrediente_noEstoque_corretamente(){
+
+        Ingrediente morango = new Fruta(TipoFruta.MORANGO);
+        Armazem armazem = new Armazem();
+        armazem.cadastrarIngrediente(morango);
+        armazem.adicionarQuantidadeDoIngrediente(morango, 2);
+        armazem.adicionarQuantidadeDoIngrediente(morango, 1);
+
+       assertAll(
+               () -> assertEquals(3, armazem.getEstoque().get(morango))
+       );
+
+    }
+
+    @Test
+    public void deve_lancarExcecaoAoAumentarQuantidadeDo_ingrediente_noEstoque_quandoValorIgualOuAbaixoDe0(){
+
+        Ingrediente morango = new Fruta(TipoFruta.MORANGO);
+        Ingrediente leite = new Base(TipoBase.LEITE);
+        Armazem armazem = new Armazem();
+        armazem.cadastrarIngrediente(morango);
+        armazem.cadastrarIngrediente(leite);
+
+        assertAll(
+                () -> assertThrows(
+                        IllegalArgumentException.class,
+                        () -> armazem.adicionarQuantidadeDoIngrediente(morango, 0),
+                        "Quantidade invalida"
+                ),
+                () -> assertThrows(
+                        IllegalArgumentException.class,
+                        () -> armazem.adicionarQuantidadeDoIngrediente(leite, -4),
+                        "Quantidade invalida"
+                )
+        );
+    }
+
+    @Test
+    public void deve_lancarExcecaoAoAumentarQuantidadeDo_ingrediente_noEstoque_quandoNaoExistente(){
+
+        Ingrediente morango = new Fruta(TipoFruta.MORANGO);
+        Ingrediente leite = new Base(TipoBase.LEITE);
+        Armazem armazem = new Armazem();
+
+        assertAll(
+                () -> assertThrows(
+                        IllegalArgumentException.class,
+                        () -> armazem.adicionarQuantidadeDoIngrediente(morango, 2),
+                        "Ingrediente não encontrado"
+                ),
+                () -> assertThrows(
+                        IllegalArgumentException.class,
+                        () -> armazem.adicionarQuantidadeDoIngrediente(leite, 3),
+                        "Ingrediente não encontrado"
+                )
+        );
     }
 }
