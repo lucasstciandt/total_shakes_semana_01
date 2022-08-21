@@ -192,4 +192,39 @@ public class ArmazemTest {
                 )
         );
     }
+
+    @Test
+    public void deve_retornarAQuantidadeDeUm_ingrediente_doEstoque_corretamente(){
+        Ingrediente morango = new Fruta(TipoFruta.MORANGO);
+        Ingrediente leite = new Base(TipoBase.LEITE);
+        Armazem armazem = new Armazem();
+        armazem.cadastrarIngrediente(morango);
+        armazem.cadastrarIngrediente(leite);
+        armazem.adicionarQuantidadeDoIngredienteEmEstoque(morango, 3);
+        armazem.adicionarQuantidadeDoIngredienteEmEstoque(leite, 1);
+
+        int quantidadeMorango = armazem.consultarQuantidadeDoIngredienteEmEstoque(morango);
+        int quantidadeLeite = armazem.consultarQuantidadeDoIngredienteEmEstoque(leite);
+
+        assertAll(
+                () -> assertEquals(3, quantidadeMorango),
+                () -> assertEquals(1, quantidadeLeite)
+        );
+
+    }
+
+    @Test
+    public void deve_lancarExcecaoAoBuscarPrecoDeUm_ingrediente_doEstoque_quandoInexistente(){
+        Ingrediente morango = new Fruta(TipoFruta.MORANGO);
+        Armazem armazem = new Armazem();
+
+        assertAll(
+                () -> assertFalse(armazem.getEstoque().containsKey(morango)),
+                () -> assertThrows(
+                        IllegalArgumentException.class,
+                        () ->armazem.consultarQuantidadeDoIngredienteEmEstoque(morango),
+                        "Ingrediente nao encontrado"
+                )
+        );
+    }
 }

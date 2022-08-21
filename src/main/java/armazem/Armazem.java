@@ -45,6 +45,11 @@ public class Armazem {
                 );
     }
 
+    public int consultarQuantidadeDoIngredienteEmEstoque(Ingrediente ingrediente) {
+        if(!estoque.containsKey(ingrediente)) throw new IllegalArgumentException("Ingrediente não encontrado");
+        return estoque.get(ingrediente);
+    }
+
     private void aumentarQuantidade(Ingrediente ingrediente, int quantidade, int quantidadeAtual) {
         int novaQuantidade = quantidadeAtual + quantidade;
         estoque.put(ingrediente, novaQuantidade);
@@ -66,4 +71,6 @@ public class Armazem {
     public Map<Ingrediente, Integer> getEstoque() {
         return estoque;
     }
+
+
 }
