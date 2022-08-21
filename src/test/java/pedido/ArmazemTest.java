@@ -19,8 +19,10 @@ public class ArmazemTest {
         Armazem armazem = new Armazem();
         armazem.cadastrarIngrediente(morango);
 
-        assertTrue(armazem.getEstoque().containsKey(morango));
-        assertEquals(0, armazem.getEstoque().get(morango));
+        assertAll(
+                () -> assertTrue(armazem.getEstoque().containsKey(morango)),
+                () -> assertEquals(0, armazem.getEstoque().get(morango))
+        );
     }
 
     @Test
@@ -33,5 +35,21 @@ public class ArmazemTest {
 
         assertThrows(IllegalArgumentException.class, () -> armazem.cadastrarIngrediente(morango),
                 "Ingrediente já cadastrado");
+    }
+
+
+    @Test
+    public void deve_descadastrarUm_ingrediente_noEstoque_corretamente(){
+
+        Ingrediente morango = new Fruta(TipoFruta.MORANGO);
+
+        Armazem armazem = new Armazem();
+        armazem.descadastrarIngrediente(morango);
+
+        assertAll(
+                () -> assertFalse(armazem.getEstoque().containsKey(morango)),
+                () -> assertNull(armazem.getEstoque().get(morango))
+        );
+
     }
 }

@@ -10,6 +10,7 @@ public class Armazem {
     Map<Ingrediente, Integer> estoque = new TreeMap<>();
 
     public void cadastrarIngrediente(Ingrediente ingrediente) {
+        if (estoque.containsKey(ingrediente)) throw new IllegalArgumentException("Ingrediente já cadastrado");
         estoque.put(ingrediente, 0);
     }
 
