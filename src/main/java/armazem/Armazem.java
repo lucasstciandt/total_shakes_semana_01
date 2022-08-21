@@ -19,12 +19,12 @@ public class Armazem {
         estoque.remove(ingrediente);
     }
 
-    public void adicionarQuantidadeDoIngrediente(Ingrediente ingrediente, int quantidade) {
+    public void adicionarQuantidadeDoIngredienteEmEstoque(Ingrediente ingrediente, int quantidade) {
 
-        if(quantidade <= 0) throw new IllegalArgumentException("Quantidade invalida");
+        this.validarQuantidade(quantidade);
 
         estoque.entrySet().stream()
-                .filter(ingredientes -> ingredientes.getKey().obterTipo().equals(ingrediente.obterTipo()))
+                .filter(ingredientes -> ingredientes.getKey().obterTipo() == ingrediente.obterTipo())
                 .findFirst()
                 .ifPresentOrElse(ingredienteEncontrado -> {
                     int novaQuantidade = ingredienteEncontrado.getValue() + quantidade;
@@ -33,6 +33,29 @@ public class Armazem {
                 }, () -> {
                     throw new IllegalArgumentException("Ingrediente não encontrado");
                 });
+    }
+
+    public void reduzirQuantidadeDoIngredienteEmEstoque(Ingrediente ingrediente, int quantidade) {
+
+        this.validarQuantidade(quantidade);
+        
+        estoque.entrySet().stream()
+                .filter(ingredientes -> ingredientes.getKey().obterTipo() == ingrediente.obterTipo())
+                .findFirst()
+                .ifPresentOrElse(ingredienteEncontrado -> {
+                    int novaQuantidade = ingredienteEncontrado.getValue() - quantidade;
+                    if(novaQuantidade <= 0){
+                        estoque.remove(ingrediente);
+                    }else{
+                        estoque.put(ingrediente, novaQuantidade);
+                    }
+                }, () -> {
+                    throw new IllegalArgumentException("Ingrediente não encontrado");
+                });
+    }
+
+    private void validarQuantidade(int quantidade) {
+        if(quantidade <= 0) throw new IllegalArgumentException("Quantidade invalida");
     }
 
     public Map<Ingrediente, Integer> getEstoque() {

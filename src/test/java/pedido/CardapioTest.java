@@ -40,13 +40,11 @@ public class CardapioTest {
 
     @Test
     void deve_retornarApenas_ingredientes_queSaoDoTipoAdicionais(){
-        var cardapioVazio = umCardapio().comTodosAdicionais().comTodasAsBases().build();
+        var cardapioCompleto = umCardapio().comTodosAdicionais().comTodasAsBases().build();
 
-        TreeMap<Ingrediente, Double> adicionais = cardapioVazio.getPrecoAdicionais();
+        TreeMap<Ingrediente, Double> adicionais = cardapioCompleto.getPrecoAdicionais();
 
-        adicionais.entrySet().stream().forEach( ingredienteDoubleEntry -> {
-            assertTrue(ingredienteDoubleEntry.getKey() instanceof Adicional);
-        });
+        adicionais.forEach((key, value) -> assertTrue(key instanceof Adicional));
 
         assertAll(
                 () -> assertFalse(adicionais.containsKey(new Base(TipoBase.SORVETE))),

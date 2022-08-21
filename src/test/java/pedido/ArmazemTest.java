@@ -46,6 +46,7 @@ public class ArmazemTest {
         Ingrediente morango = new Fruta(TipoFruta.MORANGO);
 
         Armazem armazem = new Armazem();
+        armazem.cadastrarIngrediente(morango);
         armazem.descadastrarIngrediente(morango);
 
         assertAll(
@@ -72,8 +73,8 @@ public class ArmazemTest {
         Ingrediente morango = new Fruta(TipoFruta.MORANGO);
         Armazem armazem = new Armazem();
         armazem.cadastrarIngrediente(morango);
-        armazem.adicionarQuantidadeDoIngrediente(morango, 2);
-        armazem.adicionarQuantidadeDoIngrediente(morango, 1);
+        armazem.adicionarQuantidadeDoIngredienteEmEstoque(morango, 2);
+        armazem.adicionarQuantidadeDoIngredienteEmEstoque(morango, 1);
 
        assertAll(
                () -> assertEquals(3, armazem.getEstoque().get(morango))
@@ -93,12 +94,12 @@ public class ArmazemTest {
         assertAll(
                 () -> assertThrows(
                         IllegalArgumentException.class,
-                        () -> armazem.adicionarQuantidadeDoIngrediente(morango, 0),
+                        () -> armazem.adicionarQuantidadeDoIngredienteEmEstoque(morango, 0),
                         "Quantidade invalida"
                 ),
                 () -> assertThrows(
                         IllegalArgumentException.class,
-                        () -> armazem.adicionarQuantidadeDoIngrediente(leite, -4),
+                        () -> armazem.adicionarQuantidadeDoIngredienteEmEstoque(leite, -4),
                         "Quantidade invalida"
                 )
         );
@@ -114,12 +115,79 @@ public class ArmazemTest {
         assertAll(
                 () -> assertThrows(
                         IllegalArgumentException.class,
-                        () -> armazem.adicionarQuantidadeDoIngrediente(morango, 2),
+                        () -> armazem.adicionarQuantidadeDoIngredienteEmEstoque(morango, 2),
                         "Ingrediente não encontrado"
                 ),
                 () -> assertThrows(
                         IllegalArgumentException.class,
-                        () -> armazem.adicionarQuantidadeDoIngrediente(leite, 3),
+                        () -> armazem.adicionarQuantidadeDoIngredienteEmEstoque(leite, 3),
+                        "Ingrediente não encontrado"
+                )
+        );
+    }
+
+    @Test
+    public void deve_reduzirAQuantidadeDo_ingrediente_noEstoque_corretamente(){
+
+        Ingrediente morango = new Fruta(TipoFruta.MORANGO);
+        Ingrediente leite = new Base(TipoBase.LEITE);
+        Armazem armazem = new Armazem();
+        armazem.cadastrarIngrediente(morango);
+        armazem.cadastrarIngrediente(leite);
+        armazem.adicionarQuantidadeDoIngredienteEmEstoque(morango, 3);
+        armazem.adicionarQuantidadeDoIngredienteEmEstoque(leite, 1);
+
+
+        armazem.reduzirQuantidadeDoIngredienteEmEstoque(morango, 2);
+        armazem.reduzirQuantidadeDoIngredienteEmEstoque(leite, 8);
+
+        assertAll(
+                () -> assertTrue(armazem.getEstoque().containsKey(morango)),
+                () -> assertEquals(1, armazem.getEstoque().get(morango)),
+                () -> assertFalse(armazem.getEstoque().containsKey(leite)),
+                () -> assertNull(armazem.getEstoque().get(leite))
+        );
+    }
+
+    @Test
+    public void deve_lancarExcecaoAoReduzirQuantidadeDo_ingrediente_noEstoque_quandoValorIgualOuAbaixoDe0(){
+
+        Ingrediente morango = new Fruta(TipoFruta.MORANGO);
+        Ingrediente leite = new Base(TipoBase.LEITE);
+        Armazem armazem = new Armazem();
+        armazem.cadastrarIngrediente(morango);
+        armazem.cadastrarIngrediente(leite);
+
+        assertAll(
+                () -> assertThrows(
+                        IllegalArgumentException.class,
+                        () -> armazem.reduzirQuantidadeDoIngredienteEmEstoque(morango, 0),
+                        "Quantidade invalida"
+                ),
+                () -> assertThrows(
+                        IllegalArgumentException.class,
+                        () -> armazem.reduzirQuantidadeDoIngredienteEmEstoque(leite, -4),
+                        "Quantidade invalida"
+                )
+        );
+    }
+
+    @Test
+    public void deve_lancarExcecaoAoReduzirQuantidadeDo_ingrediente_noEstoque_quandoNaoExistente(){
+
+        Ingrediente morango = new Fruta(TipoFruta.MORANGO);
+        Ingrediente leite = new Base(TipoBase.LEITE);
+        Armazem armazem = new Armazem();
+
+        assertAll(
+                () -> assertThrows(
+                        IllegalArgumentException.class,
+                        () -> armazem.reduzirQuantidadeDoIngredienteEmEstoque(morango, 2),
+                        "Ingrediente não encontrado"
+                ),
+                () -> assertThrows(
+                        IllegalArgumentException.class,
+                        () -> armazem.reduzirQuantidadeDoIngredienteEmEstoque(leite, 3),
                         "Ingrediente não encontrado"
                 )
         );
