@@ -26,13 +26,10 @@ public class Armazem {
         estoque.entrySet().stream()
                 .filter(ingredientes -> ingredientes.getKey().obterTipo() == ingrediente.obterTipo())
                 .findFirst()
-                .ifPresentOrElse(ingredienteEncontrado -> {
-                    int novaQuantidade = ingredienteEncontrado.getValue() + quantidade;
-                    estoque.put(ingrediente, novaQuantidade);
-
-                }, () -> {
-                    throw new IllegalArgumentException("Ingrediente não encontrado");
-                });
+                .ifPresentOrElse(
+                        ingredienteEncontrado -> aumentarQuantidade(ingrediente, quantidade, ingredienteEncontrado.getValue()),
+                        () -> { throw new IllegalArgumentException("Ingrediente não encontrado"); }
+                );
     }
 
     public void reduzirQuantidadeDoIngredienteEmEstoque(Ingrediente ingrediente, int quantidade) {
@@ -42,16 +39,24 @@ public class Armazem {
         estoque.entrySet().stream()
                 .filter(ingredientes -> ingredientes.getKey().obterTipo() == ingrediente.obterTipo())
                 .findFirst()
-                .ifPresentOrElse(ingredienteEncontrado -> {
-                    int novaQuantidade = ingredienteEncontrado.getValue() - quantidade;
-                    if(novaQuantidade <= 0){
-                        estoque.remove(ingrediente);
-                    }else{
-                        estoque.put(ingrediente, novaQuantidade);
-                    }
-                }, () -> {
-                    throw new IllegalArgumentException("Ingrediente não encontrado");
-                });
+                .ifPresentOrElse(
+                        ingredienteEncontrado -> reduzirQuantidade(ingrediente, quantidade, ingredienteEncontrado.getValue()),
+                        () -> { throw new IllegalArgumentException("Ingrediente não encontrado"); }
+                );
+    }
+
+    private void aumentarQuantidade(Ingrediente ingrediente, int quantidade, int quantidadeAtual) {
+        int novaQuantidade = quantidadeAtual + quantidade;
+        estoque.put(ingrediente, novaQuantidade);
+    }
+
+    private void reduzirQuantidade(Ingrediente ingrediente, int quantidade, int quantidadeAtual ) {
+        int novaQuantidade = quantidadeAtual - quantidade;
+        if(novaQuantidade <= 0){
+            estoque.remove(ingrediente);
+        }else{
+            estoque.put(ingrediente, novaQuantidade);
+        }
     }
 
     private void validarQuantidade(int quantidade) {
