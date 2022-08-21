@@ -52,4 +52,15 @@ public class ArmazemTest {
         );
 
     }
+
+    @Test
+    public void deve_lancarExcecaoAoDescadastrarUm_ingrediente_doEstoque_quandoNaoExistente(){
+
+        Ingrediente morango = new Fruta(TipoFruta.MORANGO);
+        Armazem armazem = new Armazem();
+
+        assertThrows(IllegalArgumentException.class, () -> armazem.descadastrarIngrediente(morango),
+                "Ingrediente não encontrado");
+
+    }
 }

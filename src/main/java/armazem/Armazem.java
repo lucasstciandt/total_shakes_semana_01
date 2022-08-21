@@ -14,7 +14,14 @@ public class Armazem {
         estoque.put(ingrediente, 0);
     }
 
+    public void descadastrarIngrediente(Ingrediente ingrediente) {
+        if (!estoque.containsKey(ingrediente)) throw new IllegalArgumentException("Ingrediente não encontrado");
+        estoque.remove(ingrediente);
+    }
+
     public Map<Ingrediente, Integer> getEstoque() {
         return estoque;
     }
+
+
 }
