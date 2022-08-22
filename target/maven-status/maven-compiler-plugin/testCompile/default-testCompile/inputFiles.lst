@@ -1,5 +1,6 @@
 /home/lucasst/Documentos/totalShakeFork/total_shakes_semana_01/src/test/java/builders/CardapioBuilder.java
 /home/lucasst/Documentos/totalShakeFork/total_shakes_semana_01/src/test/java/builders/ShakeBuilder.java
-/home/lucasst/Documentos/totalShakeFork/total_shakes_semana_01/src/test/java/pedido/ArmazemTest.java
 /home/lucasst/Documentos/totalShakeFork/total_shakes_semana_01/src/test/java/pedido/PedidoTest.java
+/home/lucasst/Documentos/totalShakeFork/total_shakes_semana_01/src/test/java/armazem/ArmazemTest.java
+/home/lucasst/Documentos/totalShakeFork/total_shakes_semana_01/src/test/java/builders/ArmazemBuilder.java
 /home/lucasst/Documentos/totalShakeFork/total_shakes_semana_01/src/test/java/pedido/CardapioTest.java

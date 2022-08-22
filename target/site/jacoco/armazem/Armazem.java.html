@@ -9,12 +9,12 @@ import java.util.TreeMap;
 
 <span class="fc" id="L10">    Map&lt;Ingrediente, Integer&gt; estoque = new TreeMap&lt;&gt;();</span>
 
-    public void cadastrarIngrediente(Ingrediente ingrediente) {
+    public void cadastrarIngredienteNoEstoque(Ingrediente ingrediente) {
 <span class="fc bfc" id="L13" title="All 2 branches covered.">        if (estoque.containsKey(ingrediente)) throw new IllegalArgumentException(&quot;Ingrediente já cadastrado&quot;);</span>
 <span class="fc" id="L14">        estoque.put(ingrediente, 0);</span>
 <span class="fc" id="L15">    }</span>
 
-    public void descadastrarIngrediente(Ingrediente ingrediente) {
+    public void descadastrarIngredienteNoEstoque(Ingrediente ingrediente) {
 <span class="fc" id="L18">        this.validarExistenciaDoIngrediente(ingrediente);</span>
 <span class="fc" id="L19">        estoque.remove(ingrediente);</span>
 <span class="fc" id="L20">    }</span>
