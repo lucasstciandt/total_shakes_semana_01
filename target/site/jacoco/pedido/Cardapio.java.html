@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Cardapio.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ShakeCIT</a> &gt; <a href="index.source.html" class="el_package">pedido</a> &gt; <span class="el_source">Cardapio.java</span></div><h1>Cardapio.java</h1><pre class="source lang-java linenums">package pedido;
+
+import ingredientes.Adicional;
+import ingredientes.Ingrediente;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+
+public class Cardapio {
+
+    private final TreeMap&lt;Ingrediente,Double&gt; precos;
+
+<span class="fc" id="L17">    public Cardapio(){</span>
+<span class="fc" id="L18">        this.precos= new TreeMap&lt;&gt;();</span>
+<span class="fc" id="L19">    }</span>
+
+    public void adicionarIngrediente(Ingrediente ingrediente,Double preco){
+
+<span class="fc bfc" id="L23" title="All 2 branches covered.">        if(preco &lt;= 0) throw new IllegalArgumentException(&quot;Preco invalido.&quot;);</span>
+<span class="fc" id="L24">        precos.put(ingrediente, preco);</span>
+<span class="fc" id="L25">    }</span>
+
+    public boolean atualizarIngrediente(Ingrediente ingrediente,Double preco){
+
+<span class="fc bfc" id="L29" title="All 2 branches covered.">        if(preco &lt;= 0) throw new IllegalArgumentException(&quot;Preco invalido.&quot;);</span>
+
+<span class="fc" id="L31">        precos.entrySet().stream()</span>
+<span class="fc" id="L32">                .filter(cardapio -&gt; cardapio.getKey().obterTipo().equals(ingrediente.obterTipo()))</span>
+<span class="fc" id="L33">                .findFirst()</span>
+<span class="fc" id="L34">                .ifPresentOrElse(</span>
+<span class="fc" id="L35">                        ingredienteExistente -&gt; precos.put(ingrediente, preco),</span>
+<span class="fc" id="L36">                        () -&gt; { throw new IllegalArgumentException(&quot;Ingrediente nao existe no cardapio.&quot;); }</span>
+                );
+
+<span class="fc" id="L39">        return true;</span>
+    }
+
+    public boolean removerIngrediente(Ingrediente ingrediente){
+
+<span class="fc" id="L44">        precos.entrySet().stream()</span>
+<span class="fc" id="L45">                .filter(cardapio -&gt; cardapio.getKey().obterTipo().equals(ingrediente.obterTipo()))</span>
+<span class="fc" id="L46">                .findFirst()</span>
+<span class="fc" id="L47">                .ifPresentOrElse(</span>
+<span class="fc" id="L48">                        ingredienteExistente -&gt; precos.remove(ingredienteExistente.getKey()),</span>
+<span class="fc" id="L49">                        () -&gt; { throw new IllegalArgumentException(&quot;Ingrediente nao existe no cardapio.&quot;); }</span>
+                );
+
+<span class="fc" id="L52">        return true;</span>
+    }
+
+    public Double buscarPreco(Ingrediente ingrediente){
+
+<span class="fc" id="L57">        precos.entrySet().stream()</span>
+<span class="fc" id="L58">                .filter(cardapio -&gt; cardapio.getKey().obterTipo().equals(ingrediente.obterTipo()))</span>
+<span class="fc" id="L59">                .findAny().orElseThrow(() -&gt; new IllegalArgumentException(&quot;Ingrediente nao existe no cardapio.&quot;));</span>
+
+<span class="fc" id="L61">        return precos.get(ingrediente);</span>
+    }
+
+
+    public TreeMap&lt;Ingrediente, Double&gt; getPrecoAdicionais(){
+<span class="fc" id="L66">        return this.precos.entrySet().stream()</span>
+<span class="fc" id="L67">                .filter(ingredientePreco -&gt; ingredientePreco.getKey() instanceof Adicional)</span>
+<span class="fc" id="L68">                .collect(</span>
+                        TreeMap::new,
+<span class="fc" id="L70">                        (map, elemento) -&gt; map.put(elemento.getKey(), elemento.getValue()),</span>
+                        TreeMap::putAll
+                );
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L77">        return this.precos.toString();</span>
+    }
+
+    public TreeMap&lt;Ingrediente, Double&gt; getPrecos(){
+<span class="fc" id="L81">        return this.precos;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

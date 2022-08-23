@@ -1,5 +1,6 @@
 package pedido;
 
+
 import ingredientes.*;
 import ingredientes.base.Base;
 import ingredientes.base.TipoBase;
@@ -7,203 +8,135 @@ import ingredientes.fruta.Fruta;
 import ingredientes.fruta.TipoFruta;
 import ingredientes.topping.TipoTopping;
 import ingredientes.topping.Topping;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import java.util.Map;
+import java.util.TreeMap;
 
+import static builders.CardapioBuilder.umCardapio;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CardapioTest {
 
-    Cardapio cardapio;
+    @Test
+    void deve_adicionar_ingredientesEPrecos_corretamente(){
+        var cardapioVazio = umCardapio().build();
 
-    @BeforeAll
-    void setup(){
-        cardapio = new Cardapio();
+        cardapioVazio.adicionarIngrediente(new Base(TipoBase.SORVETE), 2.0);
+        cardapioVazio.adicionarIngrediente(new Fruta(TipoFruta.MORANGO), 4.0);
+        cardapioVazio.adicionarIngrediente(new Topping(TipoTopping.CHOCOLATE), 10.0);
+
+        assertAll(
+                () -> assertEquals(3, cardapioVazio.getPrecos().size()),
+                () -> assertTrue( cardapioVazio.getPrecos().containsKey(new Base(TipoBase.SORVETE))),
+                () -> assertEquals(2.0, cardapioVazio.buscarPreco(new Base(TipoBase.SORVETE))),
+                () -> assertTrue( cardapioVazio.getPrecos().containsKey(new Fruta(TipoFruta.MORANGO))),
+                () -> assertEquals(4.0, cardapioVazio.buscarPreco(new Fruta(TipoFruta.MORANGO))),
+                () -> assertTrue( cardapioVazio.getPrecos().containsKey(new Topping(TipoTopping.CHOCOLATE))),
+                () -> assertEquals(10.0, cardapioVazio.buscarPreco(new Topping(TipoTopping.CHOCOLATE)))
+        );
     }
 
     @Test
-    void test_adicionar_ingredientes_properly(){
-        int contator = 0;
-        Base base = new Base(TipoBase.IOGURTE);
-        Fruta fruta = new Fruta(TipoFruta.MORANGO);
-        Topping topping = new Topping(TipoTopping.MEL);
+    void deve_retornarApenas_ingredientes_queSaoDoTipoAdicionais(){
+        var cardapioCompleto = umCardapio().comTodosAdicionais().comTodasAsBases().build();
 
-        cardapio.adicionarIngrediente(base, 1.0);
-        cardapio.adicionarIngrediente(fruta, 5.0);
-        cardapio.adicionarIngrediente(topping, 10.0);
+        TreeMap<Ingrediente, Double> adicionais = cardapioCompleto.getPrecoAdicionais();
 
-        assertEquals(3, cardapio.getPrecos().size());
+        adicionais.forEach((key, value) -> assertTrue(key instanceof Adicional));
 
-        for (Map.Entry<Ingrediente,Double> pair : cardapio.getPrecos().entrySet()) {
-            if (contator == 0) {
-                assertEquals(new Base(TipoBase.IOGURTE), pair.getKey());
-                assertEquals(1.0, pair.getValue());
-            }
-            if (contator == 1) {
-                assertEquals(new Topping(TipoTopping.MEL), pair.getKey());
-                assertEquals(10.0, pair.getValue());
-            }
-            if (contator == 2) {
-                assertEquals(new Fruta(TipoFruta.MORANGO), pair.getKey());
-                assertEquals(5.0, pair.getValue());
-            }
-            contator += 1;
-        }
+        assertAll(
+                () -> assertFalse(adicionais.containsKey(new Base(TipoBase.SORVETE))),
+                () -> assertFalse(adicionais.containsKey(new Base(TipoBase.IOGURTE))),
+                () -> assertFalse(adicionais.containsKey(new Base(TipoBase.LEITE)))
+        );
     }
 
     @Test
-    void test_adicionar_ingredientes_exception_precoInvalido(){
-        Base base = new Base(TipoBase.IOGURTE);
-        Fruta fruta = new Fruta(TipoFruta.MORANGO);
+    void deve_remover_ingredientes_corretamente(){
+        var cardapioComBases = umCardapio().comTodasAsBases().build();
 
-        try {
-            cardapio.adicionarIngrediente(base, -9.0);
-            fail("Excecao nao encontrada");
-        } catch (Throwable e) {
-            assertEquals("Preco invalido.", e.getMessage());
-            assertEquals(IllegalArgumentException.class, e.getClass());
-        }
+        cardapioComBases.removerIngrediente(new Base(TipoBase.SORVETE));
 
-        try {
-            cardapio.adicionarIngrediente(fruta, 0.0);
-            fail("Excecao nao encontrada");
-        } catch (Throwable e) {
-            assertEquals("Preco invalido.", e.getMessage());
-            assertEquals(IllegalArgumentException.class, e.getClass());
-        }
+        assertAll(
+                () -> assertEquals(2, cardapioComBases.getPrecos().size()),
+                () -> assertTrue( cardapioComBases.getPrecos().containsKey(new Base(TipoBase.LEITE))),
+                () -> assertTrue(cardapioComBases.getPrecos().containsKey(new Base(TipoBase.IOGURTE)))
+        );
     }
 
     @Test
-    void test_atualizar_ingredientes_properly(){
-        Base base = new Base(TipoBase.IOGURTE);
-        Fruta fruta = new Fruta(TipoFruta.MORANGO);
-        Topping topping = new Topping(TipoTopping.MEL);
+    void deve_lancarExcecaoAoAdicionar_ingredientes_quandoPrecoNegativoOuZero(){
+        var cardapioVazio = umCardapio().build();
 
-        cardapio.adicionarIngrediente(base, 1.0);
-        cardapio.adicionarIngrediente(fruta, 5.0);
-        cardapio.adicionarIngrediente(topping, 10.0);
-
-        cardapio.atualizarIngrediente(new Base(TipoBase.IOGURTE), 9.0);
-
-        assertEquals(3, cardapio.getPrecos().size());
-        assertEquals(9.0, cardapio.getPrecos().get(new Base(TipoBase.IOGURTE)));
-        assertEquals(5.0, cardapio.getPrecos().get(new Fruta(TipoFruta.MORANGO)));
-        assertEquals(10.0, cardapio.getPrecos().get(new Topping(TipoTopping.MEL)));
+        var exception = assertThrows( IllegalArgumentException.class,
+                        () -> cardapioVazio.adicionarIngrediente(new Base(TipoBase.IOGURTE), -9.0));
+        assertEquals("Preco invalido.", exception.getMessage());
     }
 
     @Test
-    void test_atualizar_ingredientes_exception_precoInvalido(){
-        Base base = new Base(TipoBase.IOGURTE);
-        Fruta fruta = new Fruta(TipoFruta.MORANGO);
+    void deve_atualizarPrecoDo_ingrediente_corretamente(){
+        var cardapioCompleto = umCardapio().comTodasAsBases().comTodosAdicionais().build();
 
-        cardapio.adicionarIngrediente(base, 9.0);
-        cardapio.adicionarIngrediente(fruta, 10.0);
+        cardapioCompleto.atualizarIngrediente(new Fruta(TipoFruta.MORANGO), 9.0);
+        cardapioCompleto.atualizarIngrediente(new Base(TipoBase.SORVETE), 10.0);
+        cardapioCompleto.atualizarIngrediente(new Topping(TipoTopping.CHOCOLATE), 20.0);
 
-        try {
-            cardapio.atualizarIngrediente(new Base(TipoBase.IOGURTE), -9.0);
-            fail("Excecao nao encontrada");
-        } catch (Throwable e) {
-            assertEquals("Preco invalido.", e.getMessage());
-            assertEquals(IllegalArgumentException.class, e.getClass());
-        }
-
-        try {
-            cardapio.atualizarIngrediente(new Fruta(TipoFruta.MORANGO), 0.0);
-            fail("Excecao nao encontrada");
-        } catch (Throwable e) {
-            assertEquals("Preco invalido.", e.getMessage());
-            assertEquals(IllegalArgumentException.class, e.getClass());
-        }
+        assertAll(
+                () -> assertEquals(9.0, cardapioCompleto.buscarPreco(new Fruta(TipoFruta.MORANGO))),
+                () -> assertEquals(10.0, cardapioCompleto.buscarPreco(new Base(TipoBase.SORVETE))),
+                () -> assertEquals(20.0, cardapioCompleto.buscarPreco(new Topping(TipoTopping.CHOCOLATE)))
+        );
     }
 
     @Test
-    void test_atualizar_ingredientes_exception_ingredienteInexistente(){
-        Base base = new Base(TipoBase.IOGURTE);
-        Fruta fruta = new Fruta(TipoFruta.MORANGO);
-        Topping topping = new Topping(TipoTopping.AVEIA);
+    void deve_lancarExcecaoAoTentarAtualizar_ingredientes_quandoPrecoNegativoOuZero(){
 
-        cardapio.adicionarIngrediente(base, 9.0);
-        cardapio.adicionarIngrediente(fruta, 10.0);
-        cardapio.adicionarIngrediente(fruta, 10.0);
+        var cardapioComBases = umCardapio().comTodasAsBases().build();
 
-        try {
-            cardapio.atualizarIngrediente(new Topping(TipoTopping.MEL), 19.0);
-            fail("Excecao nao encontrada");
-        } catch (Throwable e) {
-            assertEquals("Ingrediente nao existe no cardapio.", e.getMessage());
-            assertEquals(IllegalArgumentException.class, e.getClass());
-        }
+        var exception = assertThrows(IllegalArgumentException.class,
+                        () -> cardapioComBases.atualizarIngrediente(new Base(TipoBase.IOGURTE), -9.0));
+        assertEquals("Preco invalido.", exception.getMessage());
     }
 
     @Test
-    void test_remover_ingredientes_properly(){
-        int contator = 0;
-        Base base = new Base(TipoBase.IOGURTE);
-        Fruta fruta = new Fruta(TipoFruta.MORANGO);
-        Topping topping = new Topping(TipoTopping.MEL);
+    void deve_lancarExcecaoAoTentarAtualizar_ingredientes_inexistentes(){
+        var cardapioVazio = umCardapio().build();
 
-        cardapio.adicionarIngrediente(base, 1.0);
-        cardapio.adicionarIngrediente(fruta, 5.0);
-        cardapio.adicionarIngrediente(topping, 10.0);
-
-        cardapio.removerIngrediente(new Base(TipoBase.IOGURTE));
-
-        assertEquals(2, cardapio.getPrecos().size());
-
-        for (Map.Entry<Ingrediente,Double> pair : cardapio.getPrecos().entrySet()) {
-            if (contator == 0) {
-                assertEquals(new Topping(TipoTopping.MEL), pair.getKey());
-                assertEquals(10.0, pair.getValue());
-            }
-            if (contator == 1) {
-                assertEquals(new Fruta(TipoFruta.MORANGO), pair.getKey());
-                assertEquals(5.0, pair.getValue());
-            }
-            contator += 1;
-        }
+        var exception = assertThrows(IllegalArgumentException.class,
+                () -> cardapioVazio.atualizarIngrediente(new Topping(TipoTopping.MEL), 19.0));
+        assertEquals("Ingrediente nao existe no cardapio.", exception.getMessage());
     }
 
     @Test
-    void test_remover_ingredientes_exception_ingredienteInexistente(){
-        Base base = new Base(TipoBase.IOGURTE);
+    void deve_lancarExcecaoAoTentarRemover_ingredientes_inexistentes(){
+        var cardapioVazio = umCardapio().build();
 
-        cardapio.adicionarIngrediente(base, 1.0);
+        var exception = assertThrows(IllegalArgumentException.class,
+                () -> cardapioVazio.removerIngrediente(new Topping(TipoTopping.MEL)));
+        assertEquals("Ingrediente nao existe no cardapio.", exception.getMessage());
 
-        try {
-            cardapio.removerIngrediente(new Topping(TipoTopping.MEL));
-            fail("Excecao nao encontrada");
-        } catch (Throwable e) {
-            assertEquals("Ingrediente nao existe no cardapio.", e.getMessage());
-            assertEquals(IllegalArgumentException.class, e.getClass());
-        }
     }
 
     @Test
-    void test_buscar_ingrediente_properly(){
-        Base base = new Base(TipoBase.IOGURTE);
+    void deve_retornarValorDo_ingrediente_corretamente(){
+        var cardapio = umCardapio().comTodasAsBases().build();
 
-        cardapio.adicionarIngrediente(base, 1.0);
-
-        assertEquals(1.0, cardapio.buscarPreco(new Base(TipoBase.IOGURTE)));
+        assertAll(
+                () -> assertEquals(1.0, cardapio.buscarPreco(new Base(TipoBase.IOGURTE))),
+                () -> assertEquals(2.0, cardapio.buscarPreco(new Base(TipoBase.LEITE))),
+                () -> assertEquals(3.0, cardapio.buscarPreco(new Base(TipoBase.SORVETE)))
+        );
     }
 
     @Test
-    void test_buscar_ingrediente_exception_ingredienteInexistente(){
-        Base base = new Base(TipoBase.IOGURTE);
+    void deve_lancarExcecaoAoTentarBuscarPrecoDe_ingredientes_inexistentes(){
+        var cardapioComBases = umCardapio().comTodasAsBases().build();
 
-        cardapio.adicionarIngrediente(base, 1.0);
-
-        try {
-            cardapio.buscarPreco(new Base(TipoBase.SORVETE));
-            fail("Excecao nao encontrada");
-        } catch (Throwable e) {
-            assertEquals("Ingrediente nao existe no cardapio.", e.getMessage());
-            assertEquals(IllegalArgumentException.class, e.getClass());
-        }
+        var exception = assertThrows(IllegalArgumentException.class,
+                () -> cardapioComBases.buscarPreco(new Fruta(TipoFruta.MORANGO)));
+        assertEquals("Ingrediente nao existe no cardapio.", exception.getMessage());
     }
 
 }

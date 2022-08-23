@@ -3,7 +3,12 @@ package pedido;
 import ingredientes.Adicional;
 import ingredientes.Ingrediente;
 
+import java.util.Collection;
+import java.util.Map;
 import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class Cardapio {
 
@@ -25,20 +30,25 @@ public class Cardapio {
 
         precos.entrySet().stream()
                 .filter(cardapio -> cardapio.getKey().obterTipo().equals(ingrediente.obterTipo()))
-                .findAny().orElseThrow(() -> new IllegalArgumentException("Ingrediente nao existe no cardapio."));
+                .findFirst()
+                .ifPresentOrElse(
+                        ingredienteExistente -> precos.put(ingrediente, preco),
+                        () -> { throw new IllegalArgumentException("Ingrediente nao existe no cardapio."); }
+                );
 
-        precos.put(ingrediente, preco);
         return true;
-
     }
 
     public boolean removerIngrediente(Ingrediente ingrediente){
 
         precos.entrySet().stream()
                 .filter(cardapio -> cardapio.getKey().obterTipo().equals(ingrediente.obterTipo()))
-                .findAny().orElseThrow(() -> new IllegalArgumentException("Ingrediente nao existe no cardapio."));
+                .findFirst()
+                .ifPresentOrElse(
+                        ingredienteExistente -> precos.remove(ingredienteExistente.getKey()),
+                        () -> { throw new IllegalArgumentException("Ingrediente nao existe no cardapio."); }
+                );
 
-        precos.remove(ingrediente);
         return true;
     }
 
@@ -70,5 +80,4 @@ public class Cardapio {
     public TreeMap<Ingrediente, Double> getPrecos(){
         return this.precos;
     }
-
 }

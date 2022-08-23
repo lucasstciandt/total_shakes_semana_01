@@ -41,34 +41,6 @@ public class Cliente implements Serializable {
         }
     }
 
-    /*
-    @Override
-    public void serializarPedido(Pedido pedido) {
-        try(var outputStream = new ObjectOutputStream(new FileOutputStream("Pedido-" + pedido.getId() + ".txt"))){
-
-            outputStream.writeObject(pedido);
-
-        }catch (Exception e){
-
-            System.out.println("Nao foi possivel desserializar");
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public  Pedido desserializarPedido(int id){
-        try(var objectInputStream = new ObjectInputStream(new FileInputStream("Pedido-" + id + ".txt"))){
-
-            return (Pedido) objectInputStream.readObject();
-
-        }catch (Exception e){
-
-            System.out.println("Nao foi possivel desserializar");
-            e.printStackTrace();
-            return null;
-        }
-    }*/
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

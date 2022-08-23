@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Fruta.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ShakeCIT</a> &gt; <a href="index.source.html" class="el_package">ingredientes.fruta</a> &gt; <span class="el_source">Fruta.java</span></div><h1>Fruta.java</h1><pre class="source lang-java linenums">package ingredientes.fruta;
+
+import ingredientes.Adicional;
+import ingredientes.Ingrediente;
+
+public class Fruta  implements Adicional,Comparable&lt;Ingrediente&gt;{
+
+     private static final long serialVersionUID = 1L;
+
+     private final TipoFruta tipoFruta;
+
+<span class="fc" id="L12">     public Fruta(TipoFruta tipoFruta) {</span>
+<span class="fc" id="L13">          this.tipoFruta = tipoFruta;</span>
+<span class="fc" id="L14">     }</span>
+
+     @Override
+     public TipoFruta obterTipo() {
+<span class="fc" id="L18">          return this.tipoFruta;</span>
+     }
+
+     @Override
+     public int compareTo(Ingrediente ingrediente) {
+<span class="fc" id="L23">          return this.obterTipo().toString().compareTo(ingrediente.obterTipo().toString());</span>
+     }
+
+     @Override
+     public String toString() {
+<span class="nc" id="L28">          return this.tipoFruta.toString();</span>
+     }
+
+     @Override
+     public boolean equals(Object o) {
+<span class="pc bpc" id="L33" title="1 of 2 branches missed.">          if (this == o) return true;</span>
+<span class="pc bpc" id="L34" title="1 of 2 branches missed.">          if (!(o instanceof Fruta)) return false;</span>
+
+<span class="fc" id="L36">          Fruta fruta = (Fruta) o;</span>
+
+<span class="pc bpc" id="L38" title="1 of 2 branches missed.">          return tipoFruta == fruta.tipoFruta;</span>
+     }
+
+     @Override
+     public int hashCode() {
+<span class="nc" id="L43">          return tipoFruta.hashCode();</span>
+     }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
